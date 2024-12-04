@@ -1,0 +1,5 @@
+root = true
+
+[*]
+indent_style = tab       # Menggunakan spasi untuk indentasi
+indent_size = 3          # Jumlah spasi per level indentasi

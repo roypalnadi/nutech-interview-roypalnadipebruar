@@ -1,0 +1,22 @@
+{
+	"name": "nutech-interview-roypalnadipebruar",
+	"version": "1.0.0",
+	"description": "Untuk interview ke PT NUTECH",
+	"main": "./src/main.js",
+	"scripts": {
+		"start": "node ./src/main.js"
+	},
+	"author": "Roy Palnadi Pebruar",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.1.1",
+		"connect-timeout": "^1.9.0",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.1",
+		"joi": "^17.13.3",
+		"jsonwebtoken": "^9.0.2",
+		"multer": "^1.4.5-lts.1",
+		"mysql2": "^3.11.5"
+	},
+	"type": "module"
+}
