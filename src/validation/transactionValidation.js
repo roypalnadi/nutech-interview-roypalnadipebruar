@@ -6,6 +6,8 @@ const topUp = Joi.object({
 			"Paramter amount hanya boleh angka dan tidak boleh lebih kecil dari 0",
 		"number.min":
 			"Paramter amount hanya boleh angka dan tidak boleh lebih kecil dari 0",
+		"number.base":
+			"Paramter amount hanya boleh angka dan tidak boleh lebih kecil dari 0",
 	}),
 });
 
