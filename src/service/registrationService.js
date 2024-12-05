@@ -15,7 +15,7 @@ const save = async (request) => {
 	request.password = await bcrypt.hash(request.password, 10);
 
 	const [result] = await db.query(
-		"INSERT INTO user (email, first_name, last_name, password) values (?, ?, ?, ?)",
+		"INSERT INTO users (email, first_name, last_name, password) values (?, ?, ?, ?)",
 		[request.email, request?.first_name, request?.last_name, request.password]
 	);
 
