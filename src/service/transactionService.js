@@ -18,23 +18,23 @@ const balance = async (email) => {
 };
 
 const topUp = async (email, amount) => {
-	let user;
-	const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
-		email,
-	]);
-
-	if (users.length > 0) {
-		user = users[0];
-	} else {
-		throw new AppError(400, 102, "Profile tidak ditemukan");
-	}
-
-	const currentBalance = user.balance + amount;
-
 	const connection = await db.getConnection();
-
 	await connection.beginTransaction();
 	try {
+		let user;
+		const [users] = await connection.query(
+			"SELECT * FROM users WHERE email = ? FOR UPDATE",
+			[email]
+		);
+
+		if (users.length > 0) {
+			user = users[0];
+		} else {
+			throw new AppError(400, 102, "Profile tidak ditemukan");
+		}
+
+		const currentBalance = user.balance + amount;
+
 		await connection.query("UPDATE users SET balance = ? WHERE id = ?", [
 			currentBalance,
 			user.id,
@@ -47,48 +47,48 @@ const topUp = async (email, amount) => {
 			[user.id, invoiceNumber, "TOPUP", "Top Up balance", amount, new Date()]
 		);
 		await connection.commit();
+		return currentBalance;
 	} catch (error) {
 		await connection.rollback();
 		throw error;
 	}
-
-	return currentBalance;
 };
 
 const transaction = async (email, serviceCode) => {
-	let user;
-	const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
-		email,
-	]);
-
-	if (users.length > 0) {
-		user = users[0];
-	} else {
-		throw new AppError(400, 102, "Profile tidak ditemukan");
-	}
-
-	let service;
-	const [services] = await db.query(
-		"SELECT * FROM services WHERE service_code = ?",
-		[serviceCode]
-	);
-
-	if (services.length > 0) {
-		service = services[0];
-	} else {
-		throw new AppError(400, 102, "Service ataus Layanan tidak ditemukan");
-	}
-
-	if (user.balance < service.service_tariff) {
-		throw new AppError(400, 102, "Balance tidak mencukupi");
-	}
-
-	const currentBalance = user.balance - service.service_tariff;
-
 	const connection = await db.getConnection();
 
 	await connection.beginTransaction();
 	try {
+		let user;
+		const [users] = await connection.query(
+			"SELECT * FROM users WHERE email = ? FOR UPDATE",
+			[email]
+		);
+
+		if (users.length > 0) {
+			user = users[0];
+		} else {
+			throw new AppError(400, 102, "Profile tidak ditemukan");
+		}
+
+		let service;
+		const [services] = await connection.query(
+			"SELECT * FROM services WHERE service_code = ?",
+			[serviceCode]
+		);
+
+		if (services.length > 0) {
+			service = services[0];
+		} else {
+			throw new AppError(400, 102, "Service ataus Layanan tidak ditemukan");
+		}
+
+		if (user.balance < service.service_tariff) {
+			throw new AppError(400, 102, "Balance tidak mencukupi");
+		}
+
+		const currentBalance = user.balance - service.service_tariff;
+
 		await connection.query("UPDATE users SET balance = ? WHERE id = ?", [
 			currentBalance,
 			user.id,
