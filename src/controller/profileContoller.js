@@ -7,7 +7,7 @@ const profile = async (req, res, next) => {
 	try {
 		const user = await profileService.profile(req.email);
 
-		let profileImage;
+		let profileImage = null;
 		if (user.profile_image) {
 			profileImage = `${req.protocol}://${req.get("host")}/${
 				user?.profile_image
@@ -37,7 +37,7 @@ const update = async (req, res, next) => {
 			value.last_name
 		);
 
-		let profileImage;
+		let profileImage = null;
 		if (user.profile_image) {
 			profileImage = `${req.protocol}://${req.get("host")}/${
 				user?.profile_image
@@ -61,7 +61,7 @@ const image = async (req, res, next) => {
 	try {
 		const user = await profileService.image(req.email, req.file.path);
 
-		let profileImage;
+		let profileImage = null;
 		if (user.profile_image) {
 			profileImage = `${req.protocol}://${req.get("host")}/${
 				user?.profile_image
